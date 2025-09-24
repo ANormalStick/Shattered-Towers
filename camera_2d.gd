@@ -1,0 +1,36 @@
+extends Camera2D
+
+var shake_strength: float = 0.0
+@export var decay: float = 10.0
+
+# Zoom settings
+@export var zoom_step: float = 0.1
+@export var min_zoom: float = 0.5
+@export var max_zoom: float = 2.0
+
+func add_shake(amount: float):
+	shake_strength = amount
+
+func _process(delta: float) -> void:
+	# Screen shake
+	if shake_strength > 0:
+		offset = Vector2(
+			randf_range(-shake_strength, shake_strength),
+			randf_range(-shake_strength, shake_strength)
+		)
+		shake_strength = move_toward(shake_strength, 0, decay * delta)
+	else:
+		offset = Vector2.ZERO
+
+	# Zoom with scroll
+	if Input.is_action_just_pressed("zoom_in"):
+		_change_zoom(-zoom_step)
+	if Input.is_action_just_pressed("zoom_out"):
+		_change_zoom(zoom_step)
+
+func _change_zoom(step: float):
+	var new_zoom = Vector2(
+		clamp(zoom.x + step, min_zoom, max_zoom),
+		clamp(zoom.y + step, min_zoom, max_zoom)
+	)
+	zoom = new_zoom
