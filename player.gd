@@ -12,6 +12,9 @@
 #   - salabota "lidošana" ar dash
 #   - pievienots (dimention_shift), kas ļauj mainīt spēlētāju starp dimensijām (hope/despair)
 #   - spēlētājs var redzēt specifiskas platformas savai dimensijai
+# Mainīts: v.1.4.; 2025.09.24.
+#   - dimension switching izmanto shader (desaturācija + tonēšana)
+#   - izveidoti jauni TileMap priekš dimensijām
 
 extends CharacterBody2D
 
@@ -188,10 +191,23 @@ func _switch_dimension() -> void:
 	_update_dimension_tiles()
 
 func _update_dimension_tiles() -> void:
-	if tilemap == null:
-		return
-	# HopeLayer assumed to be layer 1
-	tilemap.set_layer_enabled(1, current_dimension == Dimension.HOPE)
+	var hope_map = get_parent().get_node_or_null("TileMap_Hope")
+	var despair_map = get_parent().get_node_or_null("TileMap_Despair")
+
+	if hope_map:
+		hope_map.visible = (current_dimension == Dimension.HOPE)
+	if despair_map:
+		despair_map.visible = (current_dimension == Dimension.DESPAIR)
+
+	# Change player's collision mask
+	if current_dimension == Dimension.HOPE:
+		# Collide with Hope platforms
+		collision_mask = 1 << 1  # Layer 2
+	else:
+		# Collide with Despair platforms
+		collision_mask = 1 << 2  # Layer 3
+
+
 
 #######################################################
 # Helper functions
