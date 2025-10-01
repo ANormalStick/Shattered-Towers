@@ -5,8 +5,8 @@ var shake_strength: float = 0.0
 
 # Zoom settings
 @export var zoom_step: float = 0.1
-@export var min_zoom: float = 0.5
-@export var max_zoom: float = 2.0
+@export var min_zoom: float = 2.5
+@export var max_zoom: float = 3.5
 
 func add_shake(amount: float):
 	shake_strength = amount

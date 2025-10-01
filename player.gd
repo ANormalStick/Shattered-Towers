@@ -176,7 +176,7 @@ func _physics_process(delta: float) -> void:
 	# Flip sprite
 	if input_vector.x != 0:
 		anim.flip_h = input_vector.x < 0
-
+	
 	# Move
 	move_and_slide()
 

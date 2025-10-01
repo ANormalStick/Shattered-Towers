@@ -597,7 +597,7 @@ physics_layer_0/collision_layer = 4
 physics_layer_0/collision_mask = 4
 sources/0 = SubResource("TileSetAtlasSource_crycw")
 
-[node name="Level1" type="Node2D"]
+[node name="DevTest" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_jwv3a")]
 position = Vector2(-63, -11)
