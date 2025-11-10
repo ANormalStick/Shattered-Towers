@@ -1,27 +1,11 @@
-# player.gd
-
-# Autors:  Jānis Mārtiņš Īvāns
-# Radīts:  v.1.0.; 2025.09.19.
-# Mainīts: v.1.1.; 2025.09.21.
-#   - pielikta stūra korekcija un sienas lēciena fiksācija
-# Mainīts: v.1.2.; 2025.09.22.
-#   - pievienotas animācijas (idle, run, jump, fall, dash, wall_slide)
-# Mainīts: v.1.3.; 2025.09.24.
-#   - fiksēta sienas slīdēšanas ātruma konsekvence
-#   - salabota dash lietošana uz sienas slīdēšanas lai "pielīmētu" sevi pie sienas
-#   - salabota "lidošana" ar dash
-#   - pievienots (dimention_shift), kas ļauj mainīt spēlētāju starp dimensijām (hope/despair)
-#   - spēlētājs var redzēt specifiskas platformas savai dimensijai
-# Mainīts: v.1.4.; 2025.09.24.
-#   - dimension switching izmanto shader (desaturācija + tonēšana)
-#   - izveidoti jauni TileMap priekš dimensijām
-
 extends CharacterBody2D
+
+@onready var GS: Node = get_node("/root/GameState")
+@onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
 #######################################################
 # Player movement configuration
 #######################################################
-
 @export var speed: float = 200.0
 @export var jump_velocity: float = -400.0
 @export var dash_speed: float = 500.0
@@ -48,6 +32,7 @@ var is_dashing: bool = false
 var dash_timer: float = 0.0
 var is_wall_sliding: bool = false
 var can_dash: bool = true
+var facing: int = 1
 
 # Jump assistance
 @export var coyote_time: float = 0.15
@@ -55,33 +40,37 @@ var can_dash: bool = true
 var coyote_timer: float = 0.0
 var jump_buffer_timer: float = 0.0
 
-# Dimension switching
-enum Dimension { HOPE, DESPAIR }
-var current_dimension: Dimension = Dimension.DESPAIR
-@onready var tilemap: TileMap = get_parent().get_node("TileMap")
+# Switch cooldown
+@export var switch_cooldown: float = 0.35
+var switch_cd_timer: float = 0.0
 
-# Animations
-@onready var anim: AnimatedSprite2D = $AnimatedSprite2D
+# Collision layers (adjust to your project)
+const LAYER_COMMON: int  = 1 << 0   # Layer 1
+const LAYER_HOPE: int    = 1 << 1   # Layer 2
+const LAYER_DESPAIR: int = 1 << 2   # Layer 3
 
-#######################################################
-# Ready
-#######################################################
 func _ready() -> void:
-	_update_dimension_tiles()
+	GS.dimension_changed.connect(_on_dimension_changed)
+	_on_dimension_changed(GS.current_dimension)
+	is_dashing = false
+	is_wall_sliding = false
 
 #######################################################
 # Process loop (dimension switching)
 #######################################################
-func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("shift_dimension"):
-		_switch_dimension()
+func _process(delta: float) -> void:
+	switch_cd_timer = max(0.0, switch_cd_timer - delta)
+	if Input.is_action_just_pressed("shift_dimension") and switch_cd_timer == 0.0:
+		switch_cd_timer = switch_cooldown
+		GS.switch_dimension()
 
 #######################################################
 # Physics loop (movement, jump, dash, wall slide)
 #######################################################
 func _physics_process(delta: float) -> void:
-	var input_vector = Vector2.ZERO
-	input_vector.x = Input.get_axis("ui_left", "ui_right")
+	var input_x: float = Input.get_axis("ui_left", "ui_right")
+	if input_x != 0.0:
+		facing = sign(input_x)
 
 	# Apply gravity if not on floor, dashing, or wall sliding
 	if not is_on_floor() and not is_dashing and not is_wall_sliding:
@@ -92,7 +81,7 @@ func _physics_process(delta: float) -> void:
 		coyote_timer = coyote_time
 		can_wall_jump = true
 		last_wall_normal = Vector2.ZERO
-		can_dash = true  # reset dash on ground
+		can_dash = true
 	else:
 		coyote_timer -= delta
 
@@ -103,57 +92,56 @@ func _physics_process(delta: float) -> void:
 		jump_buffer_timer -= delta
 
 	# Wall jump lock timer
-	if wall_jump_lock_timer > 0:
+	if wall_jump_lock_timer > 0.0:
 		wall_jump_lock_timer -= delta
 
 	# Wall sliding (automatic when touching wall and falling)
 	is_wall_sliding = false
-	if not is_on_floor() and not is_dashing and wall_jump_lock_timer <= 0:
-		if is_on_wall() and velocity.y > 0:
+	if not is_on_floor() and not is_dashing and wall_jump_lock_timer <= 0.0:
+		if is_on_wall() and velocity.y > 0.0:
 			is_wall_sliding = true
 			velocity.y = wall_slide_speed
 
 	# Dash logic
 	if is_dashing:
 		dash_timer -= delta
-		if dash_timer <= 0:
+		if dash_timer <= 0.0:
 			is_dashing = false
-		velocity = Vector2(dash_speed * sign(input_vector.x), velocity.y)
-	elif not is_dashing:
-		velocity.x = input_vector.x * speed
+		velocity = Vector2(dash_speed * facing, velocity.y)
+	else:
+		velocity.x = input_x * speed
 
 	# Jump from floor (coyote + buffer)
-	if jump_buffer_timer > 0 and coyote_timer > 0:
+	if jump_buffer_timer > 0.0 and coyote_timer > 0.0:
 		velocity.y = jump_velocity
-		jump_buffer_timer = 0
-		coyote_timer = 0
-		can_dash = true  # reset dash on jump from floor
+		jump_buffer_timer = 0.0
+		coyote_timer = 0.0
+		can_dash = true
 
 	# Wall jump
-	elif is_wall_sliding and jump_buffer_timer > 0 and can_wall_jump:
-		var wall_normal = get_wall_collision_normal()
+	elif is_wall_sliding and jump_buffer_timer > 0.0 and can_wall_jump:
+		var wall_normal: Vector2 = _get_wall_collision_normal()
 		if wall_normal != last_wall_normal:
-			var wall_dir = -1 if wall_normal.x > 0 else 1
+			var wall_dir: int = -1 if wall_normal.x > 0.0 else 1
 			velocity = Vector2(wall_jump_velocity.x * wall_dir, wall_jump_velocity.y)
-			jump_buffer_timer = 0
-			coyote_timer = 0
+			jump_buffer_timer = 0.0
+			coyote_timer = 0.0
 			wall_jump_lock_timer = wall_jump_lock_time
 			can_wall_jump = false
 			is_wall_sliding = false
 			last_wall_normal = wall_normal
-			can_dash = true  # reset dash on wall jump
+			can_dash = true
 
-	# Start dash (only 1 per air sequence)
-	if Input.is_action_just_pressed("dash") and input_vector.x != 0 and can_dash and not is_wall_sliding:
+	# Start dash (only 1 per air sequence). Allow dash at standstill using facing.
+	if Input.is_action_just_pressed("dash") and can_dash and not is_wall_sliding:
 		is_dashing = true
 		dash_timer = dash_time
-		velocity.x = dash_speed * sign(input_vector.x)
+		velocity.x = dash_speed * facing
 		can_dash = false
 
 	# Jump cut
-	if not is_on_floor() and velocity.y < 0:
-		if Input.is_action_just_released("ui_accept"):
-			velocity.y *= jump_cut_multiplier
+	if not is_on_floor() and velocity.y < 0.0 and Input.is_action_just_released("ui_accept"):
+		velocity.y *= jump_cut_multiplier
 
 	# Corner correction
 	_corner_correction()
@@ -164,85 +152,77 @@ func _physics_process(delta: float) -> void:
 	elif is_wall_sliding:
 		_play_anim("wall_slide")
 	elif not is_on_floor():
-		if velocity.y < 0:
-			_play_anim("jump")
-		else:
-			_play_anim("fall")
-	elif input_vector.x != 0:
+		_play_anim("jump" if velocity.y < 0.0 else "fall")
+	elif input_x != 0.0:
 		_play_anim("run")
 	else:
 		_play_anim("idle")
 
 	# Flip sprite
-	if input_vector.x != 0:
-		anim.flip_h = input_vector.x < 0
-	
+	if input_x != 0.0:
+		anim.flip_h = input_x < 0.0
+
 	# Move
 	move_and_slide()
 
 #######################################################
-# Dimension switching functions
+# Dimension reaction
 #######################################################
-func _switch_dimension() -> void:
-	if current_dimension == Dimension.DESPAIR:
-		current_dimension = Dimension.HOPE
+# Accepts int OR "hope"/"despair"
+func _on_dimension_changed(v: Variant) -> void:
+	var dim: int = _to_dim_enum(v)
+	# Update collisions: common + current layer
+	if dim == GS.Dimension.HOPE:
+		collision_mask = LAYER_COMMON | LAYER_HOPE
 	else:
-		current_dimension = Dimension.DESPAIR
-	_update_dimension_tiles()
-
-func _update_dimension_tiles() -> void:
-	var hope_map = get_parent().get_node_or_null("TileMap_Hope")
-	var despair_map = get_parent().get_node_or_null("TileMap_Despair")
-
-	if hope_map:
-		hope_map.visible = (current_dimension == Dimension.HOPE)
-	if despair_map:
-		despair_map.visible = (current_dimension == Dimension.DESPAIR)
-
-	# Change player's collision mask
-	if current_dimension == Dimension.HOPE:
-		# Collide with Hope platforms
-		collision_mask = 1 << 1  # Layer 2
-	else:
-		# Collide with Despair platforms
-		collision_mask = 1 << 2  # Layer 3
-
-
+		collision_mask = LAYER_COMMON | LAYER_DESPAIR
+	# Kill transient movement states to avoid cheese
+	is_wall_sliding = false
+	is_dashing = false
+	wall_jump_lock_timer = 0.0
+	jump_buffer_timer = 0.0
+	coyote_timer = 0.0
 
 #######################################################
-# Helper functions
+# Helpers
 #######################################################
+func _to_dim_enum(v: Variant) -> int:
+	if typeof(v) == TYPE_INT:
+		return int(v)
+	if typeof(v) == TYPE_STRING:
+		var s: String = String(v).to_lower()
+		return GS.Dimension.HOPE if s == "hope" else GS.Dimension.DESPAIR
+	return int(GS.current_dimension)
 
 func _play_anim(anim_name: String) -> void:
 	if anim.animation != anim_name:
 		anim.play(anim_name)
 
-func get_wall_collision_normal() -> Vector2:
+func _get_wall_collision_normal() -> Vector2:
 	for i in range(get_slide_collision_count()):
-		var collision = get_slide_collision(i)
-		if collision.get_normal().x != 0:
-			return collision.get_normal()
+		var c := get_slide_collision(i)
+		if c.get_normal().x != 0.0:
+			return c.get_normal()
 	return Vector2.ZERO
 
-# Corner correction function (Godot 4 safe)
-func _corner_correction():
+func _corner_correction() -> void:
 	if is_on_ceiling():
-		var up_pos = global_position - Vector2(0, corner_correction_height)
-		var left_pos = up_pos + Vector2(-corner_correction_push, 0)
-		var right_pos = up_pos + Vector2(corner_correction_push, 0)
+		var up_pos: Vector2 = global_position - Vector2(0.0, corner_correction_height)
+		var left_pos: Vector2  = up_pos + Vector2(-corner_correction_push, 0.0)
+		var right_pos: Vector2 = up_pos + Vector2( corner_correction_push, 0.0)
 
-		var left_query = PhysicsPointQueryParameters2D.new()
-		left_query.position = left_pos
-		left_query.collision_mask = 1  # adjust as needed
+		var mask: int = collision_mask
+		var left_q := PhysicsPointQueryParameters2D.new()
+		left_q.position = left_pos
+		left_q.collision_mask = mask
+		var right_q := PhysicsPointQueryParameters2D.new()
+		right_q.position = right_pos
+		right_q.collision_mask = mask
 
-		var right_query = PhysicsPointQueryParameters2D.new()
-		right_query.position = right_pos
-		right_query.collision_mask = 1
+		var left_hit := get_world_2d().direct_space_state.intersect_point(left_q)
+		var right_hit := get_world_2d().direct_space_state.intersect_point(right_q)
 
-		var left_hit = get_world_2d().direct_space_state.intersect_point(left_query)
-		var right_hit = get_world_2d().direct_space_state.intersect_point(right_query)
-
-		if left_hit.size() == 0:
+		if left_hit.is_empty():
 			global_position.x -= corner_correction_push
-		elif right_hit.size() == 0:
+		elif right_hit.is_empty():
 			global_position.x += corner_correction_push
