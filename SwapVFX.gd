@@ -11,5 +11,3 @@ func _ready() -> void:
 func _on_dim(_v: Variant) -> void:
 	emitting = false
 	emitting = true
-	if cam and cam.has_method("add_shake"):
-		cam.add_shake(6.0)
