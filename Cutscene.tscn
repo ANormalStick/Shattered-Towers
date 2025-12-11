@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://cuqtlda6wibmi"]
+
+[ext_resource type="Script" uid="uid://21wcnw1atnrg" path="res://cutscene.gd" id="1_7bhn1"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7bhn1")
+next_scene = "uid://ogx55r16hxrc"
+
+[node name="SlideImage" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NarrationPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="FadeRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="SubtitleLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -339.0
+offset_top = -77.0
+offset_right = 342.0
+offset_bottom = -54.0
+grow_horizontal = 2
+grow_vertical = 0

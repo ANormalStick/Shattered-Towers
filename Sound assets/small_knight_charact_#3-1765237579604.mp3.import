@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dhgcn53wqxfig"
+path="res://.godot/imported/small_knight_charact_#3-1765237579604.mp3-6601e615edcfaf1734cb9f83128e9f6e.mp3str"
+
+[deps]
+
+source_file="res://Sound assets/small_knight_charact_#3-1765237579604.mp3"
+dest_files=["res://.godot/imported/small_knight_charact_#3-1765237579604.mp3-6601e615edcfaf1734cb9f83128e9f6e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
