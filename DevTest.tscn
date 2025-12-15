@@ -1,11 +1,11 @@
 [gd_scene load_steps=18 format=4 uid="uid://dkb0nlsgw8fgo"]
 
-[ext_resource type="PackedScene" uid="uid://d1t5b2cch3vgs" path="res://player.tscn" id="1_jwv3a"]
-[ext_resource type="Shader" uid="uid://da5wsv6lkjr5j" path="res://light.gdshader" id="3_ootpb"]
-[ext_resource type="Texture2D" uid="uid://de4mwwabapowo" path="res://TilesTest1.png" id="3_v38iq"]
-[ext_resource type="Shader" uid="uid://cmm6u2clpbyh3" path="res://dark.gdshader" id="4_v38iq"]
-[ext_resource type="Shader" uid="uid://urnc5ygx7572" path="res://DevTest.gdshader" id="5_bls56"]
-[ext_resource type="Script" uid="uid://ck0vxibwqdusv" path="res://ui_dimension_tint.gd" id="6_ec1ps"]
+[ext_resource type="PackedScene" uid="uid://d1t5b2cch3vgs" path="res://scenes/objects/player.tscn" id="1_jwv3a"]
+[ext_resource type="Shader" uid="uid://da5wsv6lkjr5j" path="res://shaders/light.gdshader" id="3_ootpb"]
+[ext_resource type="Texture2D" uid="uid://de4mwwabapowo" path="res://assets/tiles/TilesTest1.png" id="3_v38iq"]
+[ext_resource type="Shader" uid="uid://cmm6u2clpbyh3" path="res://shaders/dark.gdshader" id="4_v38iq"]
+[ext_resource type="Shader" uid="uid://urnc5ygx7572" path="res://shaders/DevTest.gdshader" id="5_bls56"]
+[ext_resource type="Script" uid="uid://ck0vxibwqdusv" path="res://scripts/ui_dimension_tint.gd" id="6_ec1ps"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ootpb"]
 
@@ -644,6 +644,10 @@ material = SubResource("ShaderMaterial_71u2l")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -38.0
+offset_right = -68.0
+offset_bottom = -38.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)

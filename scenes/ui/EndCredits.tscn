@@ -1,0 +1,329 @@
+[gd_scene load_steps=3 format=3 uid="uid://cendcredits123"]
+
+[ext_resource type="Script" path="res://scripts/EndCredits.gd" id="1_credits"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.02, 0.015, 0.04, 1)
+
+[node name="EndCredits" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_credits")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="CreditsContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -350.0
+offset_top = 0.0
+offset_right = 350.0
+offset_bottom = 5000.0
+grow_horizontal = 2
+theme_override_constants/separation = 0
+
+[node name="TopSpacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 800)
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.05, 0.15, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 56
+text = "SHATTERED TOWERS"
+horizontal_alignment = 1
+
+[node name="TitleSpacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
+[node name="CreatorTitle" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.5, 0.35, 1)
+theme_override_font_sizes/font_size = 20
+text = "— Created & Developed By —"
+horizontal_alignment = 1
+
+[node name="CreatorSpacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="CreatorName" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.8, 1)
+theme_override_font_sizes/font_size = 38
+text = "ANormalStick"
+horizontal_alignment = 1
+
+[node name="CreatorNameSpacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="CreatorRealName" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.67, 0.62, 1)
+theme_override_font_sizes/font_size = 22
+text = "Jānis Mārtiņš Īvāns"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+
+[node name="RolesTitle" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.5, 0.35, 1)
+theme_override_font_sizes/font_size = 20
+text = "— Roles —"
+horizontal_alignment = 1
+
+[node name="RolesSpacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="Role1" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.85, 0.8, 1)
+theme_override_font_sizes/font_size = 22
+text = "Game Design"
+horizontal_alignment = 1
+
+[node name="Role1Spacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+
+[node name="Role2" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.85, 0.8, 1)
+theme_override_font_sizes/font_size = 22
+text = "Programming"
+horizontal_alignment = 1
+
+[node name="Role2Spacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+
+[node name="Role3" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.85, 0.8, 1)
+theme_override_font_sizes/font_size = 22
+text = "Art Direction"
+horizontal_alignment = 1
+
+[node name="Role3Spacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+
+[node name="Role4" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.85, 0.8, 1)
+theme_override_font_sizes/font_size = 22
+text = "Level Design"
+horizontal_alignment = 1
+
+[node name="Role4Spacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+
+[node name="Role5" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.85, 0.8, 1)
+theme_override_font_sizes/font_size = 22
+text = "Sound Design"
+horizontal_alignment = 1
+
+[node name="Role5Spacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+
+[node name="Role6" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.85, 0.8, 1)
+theme_override_font_sizes/font_size = 22
+text = "Writing"
+horizontal_alignment = 1
+
+[node name="Spacer3" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+
+[node name="ThanksTitle" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.6, 1)
+theme_override_font_sizes/font_size = 30
+text = "Special Thanks"
+horizontal_alignment = 1
+
+[node name="ThanksSpacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="ThanksName" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.8, 1)
+theme_override_font_sizes/font_size = 28
+text = "Jonah Cirillo"
+horizontal_alignment = 1
+
+[node name="ThanksDescSpacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="ThanksDesc" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.57, 0.52, 1)
+theme_override_font_sizes/font_size = 18
+text = "For being there and being a cool dude"
+horizontal_alignment = 1
+
+[node name="ThanksDesc2Spacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="ThanksDesc2" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.57, 0.52, 1)
+theme_override_font_sizes/font_size = 18
+text = "throughout the development of this game"
+horizontal_alignment = 1
+
+[node name="Spacer4" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+
+[node name="EngineTitle" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.5, 0.35, 1)
+theme_override_font_sizes/font_size = 20
+text = "— Made With —"
+horizontal_alignment = 1
+
+[node name="EngineSpacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="EngineName" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.85, 0.8, 1)
+theme_override_font_sizes/font_size = 26
+text = "Godot Engine 4.5"
+horizontal_alignment = 1
+
+[node name="Spacer5" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+
+[node name="AssetsTitle" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.5, 0.35, 1)
+theme_override_font_sizes/font_size = 20
+text = "— Assets & Resources —"
+horizontal_alignment = 1
+
+[node name="AssetsSpacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="Asset1" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.77, 0.72, 1)
+theme_override_font_sizes/font_size = 20
+text = "Luneblade - Little Axion Character Sprites"
+horizontal_alignment = 1
+
+[node name="Asset1Spacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Asset2" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.77, 0.72, 1)
+theme_override_font_sizes/font_size = 20
+text = "D&K - Caves Tileset"
+horizontal_alignment = 1
+
+[node name="Asset2Spacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Asset3" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.77, 0.72, 1)
+theme_override_font_sizes/font_size = 20
+text = "Dungeon Asset Pack"
+horizontal_alignment = 1
+
+[node name="Asset3Spacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Asset4" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.77, 0.72, 1)
+theme_override_font_sizes/font_size = 20
+text = "Oak Woods Asset Pack"
+horizontal_alignment = 1
+
+[node name="Asset4Spacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Asset5" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.77, 0.72, 1)
+theme_override_font_sizes/font_size = 20
+text = "Pixel 2D Castle Assets"
+horizontal_alignment = 1
+
+[node name="Spacer6" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+
+[node name="ThankYouTitle" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.05, 0.15, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 44
+text = "Thank You For Playing!"
+horizontal_alignment = 1
+
+[node name="ThankYouSpacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="ThankYouMessage" type="Label" parent="CreditsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.47, 0.42, 1)
+theme_override_font_sizes/font_size = 16
+text = "Press any key to return to the main menu"
+horizontal_alignment = 1
+
+[node name="BottomSpacer" type="Control" parent="CreditsContainer"]
+custom_minimum_size = Vector2(0, 600)
+layout_mode = 2
+
+[node name="FadeRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

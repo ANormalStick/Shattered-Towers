@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://dw6ke5rmirkdk"]
+
+[ext_resource type="Texture2D" uid="uid://chhocltgxg56k" path="res://assets/map/pixel_art_keys/key_small2.png" id="1_p0yg6"]
+[ext_resource type="AudioStream" uid="uid://bbmygj3vl1kk1" path="res://audio/sfx/Key-pickup.mp3" id="2_krfvd"]
+[ext_resource type="Script" path="res://scripts/key.gd" id="3_key"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d8y70"]
+size = Vector2(19, 18)
+
+[node name="Key" type="Node2D"]
+z_index = 0
+script = ExtResource("3_key")
+
+[node name="Key" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Key"]
+texture = ExtResource("1_p0yg6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Key"]
+position = Vector2(1.5, 0)
+shape = SubResource("RectangleShape2D_d8y70")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Key"]
+stream = ExtResource("2_krfvd")
+bus = "SFX"

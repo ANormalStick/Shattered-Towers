@@ -1,0 +1,104 @@
+[gd_scene load_steps=14 format=3 uid="uid://cl6qanyn1sclm"]
+
+[ext_resource type="Texture2D" uid="uid://do2ggt4s7albt" path="res://assets/map/Dungeon_Asset_pack/Dungeon_door(ONE_PART).png" id="1_v6xrn"]
+[ext_resource type="AudioStream" uid="uid://p1wh8hghd2y8" path="res://audio/sfx/Door-opening-sound.mp3" id="2_0phs7"]
+[ext_resource type="Script" path="res://scripts/door.gd" id="3_door"]
+[ext_resource type="AudioStream" path="res://audio/sfx/walking-up-stairs.mp3" id="4_stairs"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_50cdl"]
+atlas = ExtResource("1_v6xrn")
+region = Rect2(0, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y5njw"]
+atlas = ExtResource("1_v6xrn")
+region = Rect2(80, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4xadh"]
+atlas = ExtResource("1_v6xrn")
+region = Rect2(160, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6hwww"]
+atlas = ExtResource("1_v6xrn")
+region = Rect2(240, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v1oua"]
+atlas = ExtResource("1_v6xrn")
+region = Rect2(320, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ptf7r"]
+atlas = ExtResource("1_v6xrn")
+region = Rect2(400, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_24eas"]
+atlas = ExtResource("1_v6xrn")
+region = Rect2(480, 0, 80, 80)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xg3tq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_50cdl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y5njw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4xadh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6hwww")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v1oua")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ptf7r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_24eas")
+}],
+"loop": false,
+"name": &"Door",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_quvdd"]
+size = Vector2(79, 68)
+
+[node name="Door" type="Node2D"]
+z_index = 0
+script = ExtResource("3_door")
+
+[node name="Door" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Door"]
+sprite_frames = SubResource("SpriteFrames_xg3tq")
+animation = &"Door"
+frame = 0
+frame_progress = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+position = Vector2(-0.5, 6)
+shape = SubResource("RectangleShape2D_quvdd")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Door"]
+stream = ExtResource("2_0phs7")
+bus = "SFX"
+
+[node name="StairsAudio" type="AudioStreamPlayer2D" parent="Door"]
+stream = ExtResource("4_stairs")
+bus = "SFX"
+
+[node name="FadeRect" type="ColorRect" parent="."]
+z_index = 100
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1000.0
+offset_top = -1000.0
+offset_right = 1000.0
+offset_bottom = 1000.0
+color = Color(0, 0, 0, 0)
