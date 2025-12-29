@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c8jhf6o3itrh0"
+path="res://.godot/imported/Pixel Trails.mp3-2ddd1a6b2d27de06aad29469fda99d37.mp3str"
+
+[deps]
+
+source_file="res://audio/music/Pixel Trails.mp3"
+dest_files=["res://.godot/imported/Pixel Trails.mp3-2ddd1a6b2d27de06aad29469fda99d37.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

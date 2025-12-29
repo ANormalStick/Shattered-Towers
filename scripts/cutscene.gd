@@ -1,3 +1,15 @@
+# cutscene.gd
+#######################################################
+# Starpscēnu (cutscene) skripts.
+# Attēlo slaidu prezentāciju ar tekstu un audio,
+# nodrošina pārejas starp slaidiem un uz nākamo scēnu.
+#######################################################
+# Autors:    Jānis Mārtiņš Īvāns (JI23010)
+# Radīts:    v1.0; 2025.12.11. - Izveidota cutscene sistēma
+# Mainīts:   v1.1; 2025.12.15. - Pievienots audio un uzlabojumi
+# Mainīts:   v1.2; 2025.12.29. - Koda formatēšana un komentāri
+#######################################################
+
 extends Control
 
 @export_file("*.tscn") var next_scene : String
@@ -49,9 +61,9 @@ var can_advance   : bool = false
 @onready var narration_player : AudioStreamPlayer = $NarrationPlayer
 @onready var fade_rect        : ColorRect         = $FadeRect
 
-
+# Inicializācija - sāk ar melnu ekrānu un parāda pirmo slaidu
 func _ready() -> void:
-	# Start fully black, fade in
+	# Sāk pilnigā melnā, pakāpeniski parādās
 	fade_rect.modulate = Color(0, 0, 0, 1.0)
 
 	narration_player.finished.connect(_on_narration_finished)
@@ -60,7 +72,7 @@ func _ready() -> void:
 	_apply_slide(0)
 	_fade_in_current_slide()
 
-
+# Piemēro slaidu - iestata attēlu, tekstu un audio
 func _apply_slide(index: int) -> void:
 	current_slide = index
 	var s = slides[current_slide]
@@ -68,7 +80,7 @@ func _apply_slide(index: int) -> void:
 	slide_image.texture = s["texture"]
 	subtitle_label.text = s["subtitle"]
 	
-	# Hide panel if no subtitle
+	# Paslēpj paneli, ja nav subtitru
 	subtitle_panel.visible = s["subtitle"] != ""
 
 	narration_player.stop()
@@ -76,7 +88,7 @@ func _apply_slide(index: int) -> void:
 		narration_player.stream = s["audio"]
 		narration_player.play()
 
-
+# Pakāpeniska parādīšanās pašreizējam slaidam
 func _fade_in_current_slide() -> void:
 	can_advance = false
 	var tween := create_tween()
@@ -84,28 +96,28 @@ func _fade_in_current_slide() -> void:
 	tween.tween_property(fade_rect, "modulate:a", 0.0, 0.6)
 	tween.tween_callback(Callable(self, "_enable_advance"))
 
-
+# Pāreja uz nākamo slaidu ar fade efektu
 func _fade_to_slide(index: int) -> void:
 	can_advance = false
 	var tween := create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	# fade to black
+	# Pāreja uz melnu
 	tween.tween_property(fade_rect, "modulate:a", 1.0, 0.4)
-	# swap slide while fully black
+	# Nomaina slaidu, kad pilnigi melns
 	tween.tween_callback(Callable(self, "_apply_slide").bind(index))
-	# fade back in
+	# Pakāpeniska parādīšanās
 	tween.tween_property(fade_rect, "modulate:a", 0.0, 0.4)
 	tween.tween_callback(Callable(self, "_enable_advance"))
 
-
+# Atļauj pāriet uz nākamo slaidu
 func _enable_advance() -> void:
 	can_advance = true
 
-
+# Izsaukts, kad narrācijas audio beidzas
 func _on_narration_finished() -> void:
 	_next_slide()
 
-
+# Apstrādā lietotāja ievadi - ļauj izlaist slaidus
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_pressed():
 		return
@@ -119,14 +131,14 @@ func _unhandled_input(event: InputEvent) -> void:
 			narration_player.stop()
 		_next_slide()
 
-
+# Pāriet uz nākamo slaidu vai beidz cutscene
 func _next_slide() -> void:
 	if current_slide + 1 >= slides.size():
 		_end_cutscene()
 	else:
 		_fade_to_slide(current_slide + 1)
 
-
+# Beidz cutscene un pāriet uz nākamo scēnu
 func _end_cutscene() -> void:
 	can_advance = false
 	var tween := create_tween()

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ds38jg7aks4in"
+path="res://.godot/imported/The Tower's Echo.mp3-a017c578ecedd1b8d5026230eb6f40f5.mp3str"
+
+[deps]
+
+source_file="res://audio/music/The Tower's Echo.mp3"
+dest_files=["res://.godot/imported/The Tower's Echo.mp3-a017c578ecedd1b8d5026230eb6f40f5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,8 +1,19 @@
+# SaveMenu.gd
+#######################################################
+# Saglabāšanas/ielādes izvēlnes skripts.
+# Attēlo 3 saglabāšanas slotus ar informāciju par
+# līmeni un laiku, ļauj saglabāt, ielādēt un dzēst.
+#######################################################
+# Autors:    Jānis Mārtiņš Īvāns (JI23010)
+# Radīts:    v1.0; 2025.12.15. - Izveidota saglabāšanas izvēlne
+# Mainīts:   v1.1; 2025.12.29. - Koda formatēšana un komentāri
+#######################################################
+
 extends Control
 
 signal closed
 
-@export var mode: String = "save"  # "save" or "load"
+@export var mode: String = "save"  # "save" vai "load"
 @export var current_level: String = ""
 
 @onready var title_label: Label = $PanelContainer/MarginContainer/VBoxContainer/Title
@@ -11,16 +22,18 @@ signal closed
 
 var SaveManager: Node
 
+# Inicializācija - iestata virsrakstu un pievieno slotus
 func _ready() -> void:
 	SaveManager = get_node("/root/SaveManager")
 	
-	title_label.text = "SAVE GAME" if mode == "save" else "LOAD GAME"
+	title_label.text = "SAGLABĀT SPĒLI" if mode == "save" else "IELĀDĒT SPĒLI"
 	back_button.pressed.connect(_on_back_pressed)
 	
 	_populate_slots()
 
+# Aizpilda saglabāšanas slotus
 func _populate_slots() -> void:
-	# Clear existing
+	# Notīra esošos
 	for child in slots_container.get_children():
 		child.queue_free()
 	
@@ -32,6 +45,7 @@ func _populate_slots() -> void:
 		var slot_panel = _create_slot_panel(i, saves[i])
 		slots_container.add_child(slot_panel)
 
+# Izveido saglabāšanas slota paneli
 func _create_slot_panel(slot: int, save_data: Dictionary) -> PanelContainer:
 	var panel = PanelContainer.new()
 	panel.custom_minimum_size = Vector2(500, 80)
@@ -72,8 +86,8 @@ func _create_slot_panel(slot: int, save_data: Dictionary) -> PanelContainer:
 	detail_label.add_theme_color_override("font_color", Color(0.7, 0.65, 0.6))
 	
 	if save_data.is_empty():
-		slot_label.text = "Slot " + str(slot + 1) + " - Empty"
-		detail_label.text = "No save data"
+		slot_label.text = "Slots " + str(slot + 1) + " - Tukšs"
+		detail_label.text = "Nav saglabāto datu"
 	else:
 		var level_name = SaveManager.get_level_display_name(save_data.get("level", ""))
 		slot_label.text = "Slot " + str(slot + 1) + " - " + level_name
@@ -105,21 +119,21 @@ func _create_slot_panel(slot: int, save_data: Dictionary) -> PanelContainer:
 	action_button.add_theme_stylebox_override("normal", btn_style)
 	
 	if mode == "save":
-		action_button.text = "Save"
+		action_button.text = "Saglabāt"
 		action_button.pressed.connect(_on_save_slot.bind(slot))
 	else:
-		action_button.text = "Load"
+		action_button.text = "Ielādēt"
 		action_button.disabled = save_data.is_empty()
 		if not save_data.is_empty():
 			action_button.pressed.connect(_on_load_slot.bind(slot))
 	
 	button_container.add_child(action_button)
 	
-	# Delete button (only show if save exists)
+	# Dzēšanas poga (rāda tikai ja saglabāšana eksistē)
 	if not save_data.is_empty():
 		var delete_button = Button.new()
 		delete_button.custom_minimum_size = Vector2(80, 40)
-		delete_button.text = "Delete"
+		delete_button.text = "Dzēst"
 		delete_button.add_theme_font_size_override("font_size", 14)
 		delete_button.add_theme_color_override("font_color", Color(0.9, 0.5, 0.5))
 		
@@ -140,14 +154,16 @@ func _create_slot_panel(slot: int, save_data: Dictionary) -> PanelContainer:
 	
 	return panel
 
+# Saglabā spēli norādītajā slotā
 func _on_save_slot(slot: int) -> void:
 	if current_level.is_empty():
-		# Try to get current scene
+		# Mēģina iegūt pašreizējo scēnu
 		current_level = get_tree().current_scene.scene_file_path
 	
 	SaveManager.save_game(slot, current_level)
 	_populate_slots()
 
+# Ielādē spēli no norādītā slota
 func _on_load_slot(slot: int) -> void:
 	var save_data = SaveManager.load_game(slot)
 	if save_data.is_empty():
@@ -157,13 +173,14 @@ func _on_load_slot(slot: int) -> void:
 	if level.is_empty():
 		return
 	
-	# Restore dimension state
+	# Atjauno dimensijas stāvokli
 	if save_data.has("dimension"):
 		GameState.current_dimension = save_data.dimension
 	
 	get_tree().paused = false
 	get_tree().change_scene_to_file(level)
 
+# Dzēš saglabāšanu no norādītā slota
 func _on_delete_slot(slot: int) -> void:
 	SaveManager.delete_save(slot)
 	_populate_slots()

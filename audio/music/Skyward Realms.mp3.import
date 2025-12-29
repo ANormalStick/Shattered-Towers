@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dudrihic6sgl5"
+path="res://.godot/imported/Skyward Realms.mp3-d267b61e89e0f2ef7c62d48b239bc7cd.mp3str"
+
+[deps]
+
+source_file="res://audio/music/Skyward Realms.mp3"
+dest_files=["res://.godot/imported/Skyward Realms.mp3-d267b61e89e0f2ef7c62d48b239bc7cd.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

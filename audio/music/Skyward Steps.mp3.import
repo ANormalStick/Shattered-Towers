@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b623ffi7yknlq"
+path="res://.godot/imported/Skyward Steps.mp3-47a3224bb29518b1c7cb9c08ae84d2e3.mp3str"
+
+[deps]
+
+source_file="res://audio/music/Skyward Steps.mp3"
+dest_files=["res://.godot/imported/Skyward Steps.mp3-47a3224bb29518b1c7cb9c08ae84d2e3.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
