@@ -44,12 +44,12 @@ var current_tab: String = "audio"
 
 # Darbības, kuras var pārdefinēt
 var rebindable_actions = {
-	"ui_left": "Kustība pa kreisi",
-	"ui_right": "Kustība pa labi",
-	"ui_accept": "Lēkt",
+	"ui_left": "Move Left",
+	"ui_right": "Move Right",
+	"ui_accept": "Jump",
 	"dash": "Dash",
-	"shift_dimension": "Mainīt dimensiju",
-	"interact": "Mijiedarboties"
+	"shift_dimension": "Shift Dimension",
+	"interact": "Interact"
 }
 
 # Inicializācija - iestata cilnes, slīderus un taustiņu pogas
@@ -198,14 +198,14 @@ func _get_action_key_name(action: String) -> String:
 	for event in events:
 		if event is InputEventKey:
 			return event.as_text().replace("(Physical)", "").strip_edges()
-	return "Nav piesaistīts"
+	return "Not bound"
 
 # Izsaukts, kad taustiņu poga tiek nospiesta
 func _on_keybind_button_pressed(action: String, button: Button) -> void:
 	waiting_for_input = true
 	action_to_rebind = action
 	button_to_update = button
-	button.text = "Nospiediet jebkuru taustiņu..."
+	button.text = "Press any key..."
 
 # Apstrādā lietotāja ievadi taustiņu pārdefinēšanai
 func _input(event: InputEvent) -> void:

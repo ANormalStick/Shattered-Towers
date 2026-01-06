@@ -1492,6 +1492,9 @@ bus = &"SFX"
 [node name="DimensionSwapSound" parent="Player" index="5"]
 bus = &"SFX"
 
+[node name="DimensionOverlay" parent="Player" index="6"]
+visible = false
+
 [node name="ColorRect" parent="Player/DimensionOverlay" index="0"]
 offset_left = -1756.0
 offset_top = -2442.0
